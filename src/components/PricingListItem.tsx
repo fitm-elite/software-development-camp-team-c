@@ -8,8 +8,8 @@ export default function PricingListItem(props: PricingListItemProps) {
   const handleCount = (increment: boolean) => {
     if (increment) {
       props.setCount(props.count + 1);
-    } else {
-      props.setCount(props.count > 0 ? props.count - 1 : props.count);
+    } else if (props.count > 0) {
+      props.setCount(props.count - 1);
     }
   }
 
