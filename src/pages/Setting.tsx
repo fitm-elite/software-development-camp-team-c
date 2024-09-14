@@ -11,7 +11,7 @@ export default function Setting() {
   };
 
   const handleAddPriceToListPrice = () => {
-    if (price == "") {
+    if (price == "0" || price == "") {
       setIsPriceValid(true);
     } else {
       setIsPriceValid(false);
