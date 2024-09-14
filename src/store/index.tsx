@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useState, ReactNode } from "react";
 
 interface InitialState {
   prices: number[];
@@ -48,7 +48,5 @@ export const Provider = ({ children }: { children: ReactNode }) => {
     </Store.Provider>
   );
 };
-
-export const usePayment = () => useContext(Store);
 
 export default Store;
