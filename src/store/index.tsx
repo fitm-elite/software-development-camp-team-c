@@ -5,6 +5,7 @@ interface InitialState {
   setPrices: (price: number) => void;
   finalPrice: number;
   setFinalPrice: (price: number) => void;
+  removePrice: (price: number) => void;
 }
 
 // Initial state with functions that don't perform any actions
@@ -13,6 +14,7 @@ const initialState: InitialState = {
   setPrices: () => {},
   finalPrice: 0,
   setFinalPrice: () => {},
+  removePrice: () => {},
 };
 
 // Create Context with the initial state
@@ -27,6 +29,11 @@ export const Provider = ({ children }: { children: ReactNode }) => {
     setPricesState((prevPrices) => [...prevPrices, price]);
   };
 
+  // Function to remove a price from the list
+  const removePrice = (price: number) => {
+    setPricesState((prevPrices) => prevPrices.filter((p) => p !== price));
+  };
+
   return (
     <Store.Provider
       value={{
@@ -34,6 +41,7 @@ export const Provider = ({ children }: { children: ReactNode }) => {
         setPrices,
         finalPrice,
         setFinalPrice: setFinalPriceState,
+        removePrice,
       }}
     >
       {children}
