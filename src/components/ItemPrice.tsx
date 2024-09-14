@@ -1,13 +1,13 @@
 interface ItemPriceProps {
   price: number;
   id: number;
-  removePriceList: (id: number) => void;
+  handleRemovePriceItem: (id: number) => void;
 }
 
 export default function ItemPrice({
   price,
   id,
-  removePriceList,
+  handleRemovePriceItem,
 }: ItemPriceProps) {
   return (
     <div className="m-2">
@@ -17,7 +17,7 @@ export default function ItemPrice({
         </div>
         <div>
           <button
-            onClick={() => removePriceList(id)}
+            onClick={() => handleRemovePriceItem(id)}
             className="text-white font-bold bg-red-500  rounded-md px-4 py-3 hover:bg-red-600"
           >
             X
