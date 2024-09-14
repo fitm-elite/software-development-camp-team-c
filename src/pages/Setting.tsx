@@ -1,6 +1,6 @@
 import ItemPrice from "@/components/ItemPrice";
 import Store from "@/store";
-import { useContext, useEffect, useState } from "react";
+import { useContext,  useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Setting() {
@@ -10,13 +10,6 @@ export default function Setting() {
   const [isPriceValid, setIsPriceValid] = useState<boolean>(false);
   const [isSamePriceValid, setIsSamePriceValid] = useState<boolean>(false);
   const [isEmptyPricesValid, setIsEmptyPricesValid] = useState<boolean>(false);
-
-  useEffect(() => {
-    const oldPrices = localStorage.getItem("prices");
-    if (oldPrices != null) {
-      setPrices(JSON.parse(oldPrices)); // Initialize state from localStorage
-    }
-  }, []);
 
   const handlePriceChange = (input: React.ChangeEvent<HTMLInputElement>) => {
     setPrice(input.target.value.replace(/\D+/g, ""));

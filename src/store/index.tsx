@@ -44,8 +44,10 @@ export const Provider = ({ children }: { children: ReactNode }) => {
   };
 
   // Function to remove a price from the list
-  const removePrice = (price: number) => {
-    setPricesState((prevPrices) => prevPrices.filter((p) => p !== price));
+  const removePrice = (price: number) =>  {
+    const removePrices = prices.filter((p) => p !== price);
+    setPricesState(removePrices);
+    localStorage.setItem("prices", JSON.stringify(removePrices))
   };
 
   return (
