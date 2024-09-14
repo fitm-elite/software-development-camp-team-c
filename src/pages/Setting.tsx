@@ -1,6 +1,6 @@
 import ItemPrice from "@/components/ItemPrice";
 import Store from "@/store";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Setting() {
@@ -9,6 +9,14 @@ export default function Setting() {
   const [price, setPrice] = useState("");
   const [isPriceValid, setIsPriceValid] = useState<boolean>(false);
   const [isSamePriceValid, setIsSamePriceValid] = useState<boolean>(false);
+  const [isEmptyPricesValid, setIsEmptyPricesValid] = useState<boolean>(false);
+
+  useEffect(() => {
+    const oldPrices = localStorage.getItem("prices");
+    if (oldPrices != null) {
+      setPrices(JSON.parse(oldPrices)); // Initialize state from localStorage
+    }
+  }, []);
 
   const handlePriceChange = (input: React.ChangeEvent<HTMLInputElement>) => {
     setPrice(input.target.value.replace(/\D+/g, ""));
@@ -36,9 +44,11 @@ export default function Setting() {
 
   const handleSubmit = () => {
     if (prices.length == 0) {
-      ////
+      /// check if not add price to list
+      setIsEmptyPricesValid(true);
     } else {
       ///add to localstorage
+      setIsEmptyPricesValid(false);
       localStorage.setItem("prices", JSON.stringify(prices));
       navigate("/");
     }
@@ -78,6 +88,11 @@ export default function Setting() {
           )}
           {isSamePriceValid && (
             <p className="text-red-500 mt-2 absolute">ราคาซ้ำ!</p>
+          )}
+          {isEmptyPricesValid && (
+            <p className="text-red-500 mt-2 absolute">
+              โปรดเพิ่มราคาเข้าระบบก่อน!
+            </p>
           )}
         </div>
         <div>

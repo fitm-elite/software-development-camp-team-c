@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 
 interface InitialState {
   prices: number[];
@@ -22,6 +28,14 @@ const Store = createContext<InitialState>(initialState);
 
 export const Provider = ({ children }: { children: ReactNode }) => {
   const [prices, setPricesState] = useState<number[]>([]);
+
+  useEffect(() => {
+    const oldPrices = localStorage.getItem("prices");
+    if (oldPrices) {
+      setPricesState(JSON.parse(oldPrices));
+    }
+  }, []);
+
   const [finalPrice, setFinalPriceState] = useState<number>(0);
 
   // Wrap the setter function to add new prices
