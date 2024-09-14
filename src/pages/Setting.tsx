@@ -1,27 +1,35 @@
 import ItemPrice from "@/components/ItemPrice";
-import { useState } from "react";
+import Store from "@/store";
+import { useContext, useState } from "react";
 
 export default function Setting() {
+  const { prices, setPrices, removePrice } = useContext(Store);
   const [price, setPrice] = useState("");
   const [isPriceValid, setIsPriceValid] = useState<boolean>(false);
-  const [priceList, setPriceList] = useState([1, 1, 1]);
+  const [isSamePriceValid, setIsSamePriceValid] = useState<boolean>(false);
 
   const handlePriceChange = (input: React.ChangeEvent<HTMLInputElement>) => {
     setPrice(input.target.value.replace(/\D+/g, ""));
   };
 
   const handleAddPriceToListPrice = () => {
-    if (price == "0" || price == "") {
+    if (price.charAt(0) == "0" || price == "") {
       setIsPriceValid(true);
     } else {
       setIsPriceValid(false);
-
-      ///TODO: add price item to list prices
+      ///TODO: add price item to list prices and check if price not have exist
+      if (prices.includes(parseInt(price))) {
+        setIsSamePriceValid(true);
+      } else {
+        setIsSamePriceValid(false);
+        setPrices(parseInt(price));
+        setPrice("");
+      }
     }
   };
 
-  const handleRemovePriceItem = (id: number) => {
-    console.log(id);
+  const handleRemovePriceItem = (price: number) => {
+    removePrice(price);
   };
 
   const handleSubmit = () => {};
@@ -34,14 +42,13 @@ export default function Setting() {
         </h5>
       </div>
       <div
-        className={`flex flex-col my-4 overflow-y-scroll ${priceList.length > 5 ? " h-[25rem]" : ""}`}
+        className={`flex flex-col my-4 overflow-y-scroll ${prices.length > 5 ? " h-[25rem]" : ""}`}
       >
-        {priceList.map((it, key) => {
+        {prices.map((it, key) => {
           return (
             <ItemPrice
               key={key}
-              price={11}
-              id={1}
+              price={it}
               handleRemovePriceItem={handleRemovePriceItem}
             />
           );
@@ -58,6 +65,9 @@ export default function Setting() {
           />
           {isPriceValid && (
             <p className="text-red-500 mt-2 absolute">โปรดกรอกราคา!</p>
+          )}
+          {isSamePriceValid && (
+            <p className="text-red-500 mt-2 absolute">ราคาซ้ำ!</p>
           )}
         </div>
         <div>
