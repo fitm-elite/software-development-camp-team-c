@@ -4,18 +4,18 @@ import { redirect } from "react-router-dom";
 
 export default function Checkout() {
   const { finalPrice } = useContext(Store); // Access the finalPrice from the store
-  const [qrURL, setQrURL] = useState('');
+  const [qrURL, setQrURL] = useState("");
   const handleBack = () => {
     window.history.back();
   };
 
   useEffect(() => {
     if (finalPrice > 0) {
-      setQrURL(`https://promptpay.io/0628295556/${finalPrice}.png`)
+      setQrURL(`https://promptpay.io/0628295556/${finalPrice}.png`);
     } else {
       redirect("/");
     }
-  },[finalPrice] )
+  }, [finalPrice]);
 
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center bg-gray-100 space-y-4">

@@ -1,8 +1,38 @@
 import ItemPrice from "@/components/ItemPrice";
-import { useState } from "react";
+import Store from "@/store";
+import { useContext, useState } from "react";
 
 export default function Setting() {
-  const [price, setPrice] = useState<number>(0);
+  const { prices, setPrices, removePrice } = useContext(Store);
+  const [price, setPrice] = useState("");
+  const [isPriceValid, setIsPriceValid] = useState<boolean>(false);
+  const [isSamePriceValid, setIsSamePriceValid] = useState<boolean>(false);
+
+  const handlePriceChange = (input: React.ChangeEvent<HTMLInputElement>) => {
+    setPrice(input.target.value.replace(/\D+/g, ""));
+  };
+
+  const handleAddPriceToListPrice = () => {
+    if (price.charAt(0) == "0" || price == "") {
+      setIsPriceValid(true);
+    } else {
+      setIsPriceValid(false);
+      ///TODO: add price item to list prices and check if price not have exist
+      if (prices.includes(parseInt(price))) {
+        setIsSamePriceValid(true);
+      } else {
+        setIsSamePriceValid(false);
+        setPrices(parseInt(price));
+        setPrice("");
+      }
+    }
+  };
+
+  const handleRemovePriceItem = (price: number) => {
+    removePrice(price);
+  };
+
+  const handleSubmit = () => {};
 
   return (
     <div className="mx-5 my-2">
@@ -11,35 +41,54 @@ export default function Setting() {
           เพิ่มราคาเข้าระบบ
         </h5>
       </div>
-      <div className="flex flex-col my-4 overflow-y-scroll h-[25rem]">
-        <ItemPrice />
-        <ItemPrice />
-        <ItemPrice />
-        <ItemPrice />
-        <ItemPrice />
-        <ItemPrice />
-        <ItemPrice />
-        <ItemPrice />
-        <ItemPrice />
-        <ItemPrice />
+      <div
+        className={`flex flex-col my-4 overflow-y-scroll ${prices.length > 5 ? " h-[25rem]" : ""}`}
+      >
+        {prices.map((it, key) => {
+          return (
+            <ItemPrice
+              key={key}
+              price={it}
+              handleRemovePriceItem={handleRemovePriceItem}
+            />
+          );
+        })}
       </div>
-      <div className="flex  space-x-4">
-        <div className="mx-2">
+      <div className="flex items-center  space-x-4">
+        <div className="ml-3 w-full">
           <input
+            type="text"
+            placeholder="ราคา"
             value={price}
-            onChange={(prv: React.ChangeEvent<HTMLInputElement>) =>
-              setPrice(parseInt(prv.target.value))
-            }
-            type="number"
-            className="bg-gray-100 shadow-md text-xl w-[15rem] p-1 border-1 rounded-md"
+            onInput={handlePriceChange}
+            className="bg-white shadow-md text-xl w-full p-1 border-2 rounded-md border-gray-100 "
           />
+          {isPriceValid && (
+            <p className="text-red-500 mt-2 absolute">โปรดกรอกราคา!</p>
+          )}
+          {isSamePriceValid && (
+            <p className="text-red-500 mt-2 absolute">ราคาซ้ำ!</p>
+          )}
         </div>
         <div>
-          <button>+</button>
+          <button
+            onClick={() => handleAddPriceToListPrice()}
+            className="text-white font-bold bg-blue-500  rounded-full py-2 text-xl px-4 hover:bg-blue-600"
+          >
+            +
+          </button>
         </div>
       </div>
+      <div className="my-7 ">
+        <hr />
+      </div>
       <div className="flex justify-center">
-        <button>บันทึก</button>
+        <button
+          onClick={() => handleSubmit()}
+          className="w-full mx-5 px-3 py-5 text-white font-mono font-bold text-xl bg-green-500 rounded-md hover:bg-green-600"
+        >
+          บันทึก
+        </button>
       </div>
     </div>
   );
