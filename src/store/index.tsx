@@ -1,4 +1,9 @@
-import { createContext, useState, ReactNode } from "react";
+import {
+  createContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 
 interface InitialState {
   prices: number[];
@@ -22,6 +27,14 @@ const Store = createContext<InitialState>(initialState);
 
 export const Provider = ({ children }: { children: ReactNode }) => {
   const [prices, setPricesState] = useState<number[]>([]);
+
+  useEffect(() => {
+    const oldPrices = localStorage.getItem("prices");
+    if (oldPrices) {
+      setPricesState(JSON.parse(oldPrices));
+    }
+  }, []);
+
   const [finalPrice, setFinalPriceState] = useState<number>(0);
 
   // Wrap the setter function to add new prices
@@ -30,8 +43,10 @@ export const Provider = ({ children }: { children: ReactNode }) => {
   };
 
   // Function to remove a price from the list
-  const removePrice = (price: number) => {
-    setPricesState((prevPrices) => prevPrices.filter((p) => p !== price));
+  const removePrice = (price: number) =>  {
+    const removePrices = prices.filter((p) => p !== price);
+    setPricesState(removePrices);
+    localStorage.setItem("prices", JSON.stringify(removePrices))
   };
 
   return (
