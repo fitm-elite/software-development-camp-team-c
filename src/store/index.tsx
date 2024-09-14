@@ -1,11 +1,7 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 
-interface PriceItem {
-  price: number;
-}
-
 interface InitialState {
-  prices: PriceItem[];
+  prices: number[];
   setPrices: (price: number) => void;
   finalPrice: number;
   setFinalPrice: (price: number) => void;
@@ -23,12 +19,12 @@ const initialState: InitialState = {
 const Store = createContext<InitialState>(initialState);
 
 export const Provider = ({ children }: { children: ReactNode }) => {
-  const [prices, setPricesState] = useState<PriceItem[]>([]);
+  const [prices, setPricesState] = useState<number[]>([]);
   const [finalPrice, setFinalPriceState] = useState<number>(0);
 
   // Wrap the setter function to add new prices
   const setPrices = (price: number) => {
-    setPricesState((prevPrices) => [...prevPrices, { price }]);
+    setPricesState((prevPrices) => [...prevPrices, price]);
   };
 
   return (

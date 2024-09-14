@@ -1,0 +1,1 @@
+export const pricesTemplate = [50, 40, 10, 5]
