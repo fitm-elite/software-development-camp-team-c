@@ -1,9 +1,11 @@
 import ItemPrice from "@/components/ItemPrice";
 import Store from "@/store";
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Setting() {
   const { prices, setPrices, removePrice } = useContext(Store);
+  const navigate = useNavigate();
   const [price, setPrice] = useState("");
   const [isPriceValid, setIsPriceValid] = useState<boolean>(false);
   const [isSamePriceValid, setIsSamePriceValid] = useState<boolean>(false);
@@ -32,7 +34,15 @@ export default function Setting() {
     removePrice(price);
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    if (prices.length == 0) {
+      ////
+    } else {
+      ///add to localstorage
+      localStorage.setItem("prices", JSON.stringify(prices));
+      navigate("/");
+    }
+  };
 
   return (
     <div className="mx-5 my-2">
